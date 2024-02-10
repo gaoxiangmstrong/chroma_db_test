@@ -1,0 +1,16 @@
+# 虚拟环境
+venv/
+.env
+my-venv
+
+# PyCharm
+.idea/
+
+# 编译生成的文件
+__pycache__/
+*.pyc
+
+# macOS 系统文件
+.DS_Store
+
+db
