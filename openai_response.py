@@ -20,4 +20,4 @@ def save_one_story(address, title):
   with open(f"stories/{address}.txt", "w") as f:
     f.write(completion.choices[0].message.content)
 
-save_one_story(address="story4", title="鲁迅")
+save_one_story(address="story6", title="traveling around the world")

@@ -32,41 +32,56 @@ def read_and_save_one_story(address):
       documents = story,
       ids = f"{address}"
     )
-  print("ok")
+  print("saved")
 
 
-# read_and_save_one_story("story1", "one_piece")
-# read_and_save_one_story("story2", "one_piece")
-# read_and_save_one_story("story3", "one_piece")
-# read_and_save_one_story("story4")
+
+# read_and_save_one_story("story5")
+# read_and_save_one_story("story6")
 
 # query
-vector = get_embedding("""
+query_text = """
 Their journey took them through treacherous seas, perilous encounters, and fierce battles against powerful enemies. But Luffy and his crew faced every challenge with unwavering resolve, fueled by their unbreakable bonds of friendship. They laughed, cried, trusted, and fought together, forming an unyielding unity that made them virtually unstoppable.
 
 In their pursuit of the One Piece, Luffy and his crew discovered the true meaning of courage, sacrifice, and loyalty. They encountered allies who became family, enemies who became allies, and obstacles that tested their determination. And through it all, they never lost sight of their ultimate goal.
-""")
-data = collection.query(query_embeddings=vector, n_results=4) # 选择查找的数量
-# Adjusting the data to ensure all lists are of the same length
-ids = data['ids'][0]
-distances = data['distances'][0]
-documents = data['documents'][0]
+"""
+# 拿到文章的embeddings然后返回一个pandas表格
+def query_and_process_results(query_text, n_results=6):
+    """
+    对集合执行查询，并处理查询结果。
+    
+    参数:
+    - query_text: str, 查询文本。
+    - n_results: int, 返回结果的数量。
+    
+    返回:
+    - df: DataFrame, 查询结果的DataFrame。
+    """
+    vector = get_embedding(query_text)
+    data = collection.query(query_embeddings=vector, n_results=n_results) # 选择查找的数量
+    # Adjusting the data to ensure all lists are of the same length
+    ids = data['ids'][0]
+    distances = data['distances'][0]
+    documents = data['documents'][0]
 
-# Truncating the lists to the length of the shortest list
-min_length = min(len(ids), len(distances), len(documents))
-ids = ids[:min_length]
-distances = distances[:min_length]
-documents = documents[:min_length]
+    # Truncating the lists to the length of the shortest list
+    min_length = min(len(ids), len(distances), len(documents))
+    ids = ids[:min_length]
+    distances = distances[:min_length]
+    documents = documents[:min_length]
 
-# Truncating document excerpts to 100 characters
-document_excerpts = [doc[:30] for doc in documents]
+    # Truncating document excerpts to 100 characters
+    document_excerpts = [doc[:30] for doc in documents]
 
-# Creating a DataFrame
-df = pd.DataFrame({
-    'Story ID': ids,
-    'Distance Score': distances,
-    'Document Excerpt': document_excerpts
-})
+    # Creating a DataFrame
+    df = pd.DataFrame({
+        'Story ID': ids,
+        'Distance Score': distances,
+        'Document Excerpt': document_excerpts
+    })
 
-# Display the DataFrame
-print(df)
+    # Display the DataFrame
+    return df
+
+
+print(query_and_process_results(query_text=query_text, n_results=6))

@@ -182,4 +182,18 @@ insulation
 winter snow cover
 equatorial
 low growth form
-prevalent
+prevalent　　 
+
+语法 词汇 文章 
+3 ： 2 ： 5
+文章A -》 相似文章B
+A -> B
+10 次 1-10 -》 for each 文章 table 
+（文章A ）-》 gpt 总结 200字/ middle school student level user（level ） 5  -> 用户阅读 
+200 文章
+语法和词汇
+table vocabulary_1:
+- id
+- word
+
+
